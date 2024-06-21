@@ -1,0 +1,129 @@
+@import "../src/colors.css";
+body {
+  overflow-x: hidden;
+  color: gray;
+}
+.login-left {
+  background-color: var(--main-bg-color);
+}
+.heading-text {
+  color: var(--main-bg-color);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+* {
+  font-size: 12px;
+}
+.custom-ag-theme .ag-header {
+  background-color: var(--main-bg-color);
+}
+.custom-ag-theme .ag-root-wrapper {
+  border-radius: 0;
+  font-size: 12px;
+  height: fit-content;
+}
+.ag-header-cell-text {
+  color: white !important;
+}
+.card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  background-color: #fff;
+  width: 99%;
+}
+.btn {
+  background-color: var(--main-bg-color);
+  color: white;
+  padding: 6px 10px;
+  font-size: 12px;
+}
+.btn:hover {
+  background-color: var(--main-bg-color);
+  color: white;
+  opacity: 90%;
+}
+.modal {
+  --bs-modal-width: 70%;
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+}
+.close {
+  background-color: white;
+  border: 0;
+  padding: 0 20px;
+}
+.ps-sidebar-container {
+  width: 15%;
+}
+#daniel {
+  border-color: rgba(111, 111, 111, 0.2) transparent transparent;
+  border-style: solid;
+  border-width: 15px;
+  position: absolute;
+}
+.loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.table-header td {
+  padding: 4px 4px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid white;
+}
+.print-table tbody td {
+  border: 1px solid white;
+  background-color: #eceeef;
+}
+.print-table tfoot td {
+  border: 1px solid white;
+  background-color: #eceeef;
+}
+@media print {
+  body {
+    visibility: hidden;
+  }
+  .thead {
+    display: table-header-group;
+  }
+  .tfoot {
+    display: table-footer-group;
+  }
+  #printarea {
+    visibility: visible;
+    position: relative;
+    margin: 0;
+    margin-left: -23%;
+    width: 1200px;
+  }
+}
