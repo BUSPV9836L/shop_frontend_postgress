@@ -60,10 +60,10 @@ const Purchase = () => {
       if (!data?.stackTrace) {
         setRowData(data);
       } else {
-        alert(data.message);
+        alert("Server Error!");
       }
     } catch (error) {
-      alert("Server Error!");
+      alert(error.message);
     } finally {
       setIsModalOpen(false);
       setIsSaveing(false);
@@ -96,10 +96,10 @@ const Purchase = () => {
       if (!data?.stackTrace) {
         alert("Record Saved Succesfully!");
       } else {
-        alert(data.message);
+        alert("Server Error!");
       }
     } catch (error) {
-      alert("Server Error");
+      alert(error.message);
     } finally {
       setIsModalOpen(false);
       setIsSaveing(false);
@@ -153,10 +153,10 @@ const Purchase = () => {
         getAllPurchase();
         alert("Record Updated Succesfully!");
       } else {
-        alert(data.message);
+        alert("Server Error!");
       }
     } catch (error) {
-      console.log(error);
+      alert(error.message);
     } finally {
       setIsModalOpen(false);
     }
@@ -210,10 +210,10 @@ const Purchase = () => {
             filter: true,
             resizable: true,
             width: 100,
-            autoHeight:true
+            autoHeight: true,
           }}
-          gridOptions={{ headerHeight: 30, rowHeight: 28 }}
           suppressCellSelection={true}
+          gridOptions={{ headerHeight: 30, rowHeight: 28 }}
           rowSelection="multiple"
           pagination={true}
           onGridReady={onGridReady}
@@ -273,28 +273,192 @@ const Purchase = () => {
               Save
             </button>
           </div>
-          <table className=" table ">
-            <thead>
-              <tr>
-                <th scope="col"></th>
-                <th scope="col">No.</th>
-                <th scope="col">Product Name</th>
-                <th scope="col">Brand</th>
-                <th scope="col">Category</th>
-                <th scope="col">MRP</th>
-                <th scope="col">Quantity</th>
-                <th scope="col"></th>
-              </tr>
-            </thead>
-            <tbody>
-              {product?.map((event, index) => (
-                <tr key={event?.id}>
-                  <td>
-                    {index === product.length - 1 && (
+          <div style={{ width: "100%", overflowX: "scroll" }}>
+            <table className=" table " style={{ width: "1200px" }}>
+              <thead>
+                <tr>
+                  <th
+                    scope="col"
+                    style={{
+                      background: "var(--main-bg-color",
+                      color: "white",
+                      textAlign: "left",
+                    }}
+                  ></th>
+                  <th
+                    scope="col"
+                    style={{
+                      background: "var(--main-bg-color",
+                      color: "white",
+                      textAlign: "left",
+                    }}
+                  >
+                    No.
+                  </th>
+                  <th
+                    scope="col"
+                    style={{
+                      background: "var(--main-bg-color",
+                      color: "white",
+                      textAlign: "left",
+                    }}
+                  >
+                    Product Name
+                  </th>
+                  <th
+                    scope="col"
+                    style={{
+                      background: "var(--main-bg-color",
+                      color: "white",
+                      textAlign: "left",
+                    }}
+                  >
+                    Brand
+                  </th>
+                  <th
+                    scope="col"
+                    style={{
+                      background: "var(--main-bg-color",
+                      color: "white",
+                      textAlign: "left",
+                    }}
+                  >
+                    Category
+                  </th>
+                  <th
+                    scope="col"
+                    style={{
+                      background: "var(--main-bg-color",
+                      color: "white",
+                      textAlign: "left",
+                    }}
+                  >
+                    MRP
+                  </th>
+                  <th
+                    scope="col"
+                    style={{
+                      background: "var(--main-bg-color",
+                      color: "white",
+                      textAlign: "left",
+                    }}
+                  >
+                    Quantity
+                  </th>
+                  <th
+                    scope="col"
+                    style={{
+                      background: "var(--main-bg-color",
+                      color: "white",
+                      textAlign: "left",
+                    }}
+                  ></th>
+                </tr>
+              </thead>
+              <tbody>
+                {product?.map((event, index) => (
+                  <tr key={event?.id}>
+                    <td>
+                      {index === product.length - 1 && (
+                        <span
+                          onClick={() => {
+                            if (!event.isControldisabled) {
+                              handelAddNew();
+                            }
+                          }}
+                          style={{
+                            fontSize: "20px",
+                            fontWeight: "bolder",
+                            cursor: !event.isControldisabled ? "pointer" : "",
+                          }}
+                          aria-hidden="true"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            fill="var(--main-bg-color)"
+                            class="bi bi-plus-circle"
+                            viewBox="0 0 16 16"
+                          >
+                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                          </svg>
+                        </span>
+                      )}
+                    </td>
+                    <td>{index + 1}</td>
+                    <td>
+                      <input
+                        type="text"
+                        name="name"
+                        value={product && product[index]?.name}
+                        id="name"
+                        className="form-control"
+                        onChange={(e) => handelChange(e, event?.id)}
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name="brand"
+                        value={product && product[index]?.brand}
+                        onChange={(e) => handelChange(e, event?.id)}
+                        id="brand"
+                        className="form-control"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        name="category"
+                        value={product && product[index]?.category}
+                        onChange={(e) => handelChange(e, event?.id)}
+                        id="category"
+                        className="form-control"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        onChange={(e) => {
+                          let number = e.target.value;
+                          if (isNaN(number) || number < 0) {
+                            return;
+                          } else if (/^0/.test(number)) {
+                            number = number.replace(/^0/, "");
+                          } else {
+                            handelChange(e, event?.id);
+                          }
+                        }}
+                        type="text"
+                        name="price"
+                        value={product && product[index]?.price}
+                        id="price"
+                        className="form-control"
+                      />
+                    </td>
+                    <td>
+                      <input
+                        type="text"
+                        value={product && product[index]?.quantity_available}
+                        name="quantity_available"
+                        id="quantity_available"
+                        className="form-control"
+                        onChange={(e) => {
+                          let number = e.target.value;
+                          if (isNaN(number) || number < 0 || number % 1 !== 0) {
+                            return;
+                          } else {
+                            handelChange(e, event?.id);
+                          }
+                        }}
+                      />
+                    </td>
+                    <td>
                       <span
                         onClick={() => {
                           if (!event.isControldisabled) {
-                            handelAddNew();
+                            handelDelete(event?.id);
                           }
                         }}
                         style={{
@@ -304,98 +468,24 @@ const Purchase = () => {
                         }}
                         aria-hidden="true"
                       >
-                        &#43;
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          fill="var(--main-bg-color)"
+                          class="bi bi-x-circle"
+                          viewBox="0 0 16 16"
+                        >
+                          <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                          <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
+                        </svg>
                       </span>
-                    )}
-                  </td>
-                  <td>{index + 1}</td>
-                  <td>
-                    <input
-                      type="text"
-                      name="name"
-                      value={product && product[index]?.name}
-                      id="name"
-                      className="form-control"
-                      onChange={(e) => handelChange(e, event?.id)}
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      name="brand"
-                      value={product && product[index]?.brand}
-                      onChange={(e) => handelChange(e, event?.id)}
-                      id="brand"
-                      className="form-control"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      name="category"
-                      value={product && product[index]?.category}
-                      onChange={(e) => handelChange(e, event?.id)}
-                      id="category"
-                      className="form-control"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      onChange={(e) => {
-                        let number = e.target.value;
-                        if (isNaN(number) || number < 0) {
-                          return;
-                        } else if (/^0/.test(number)) {
-                          number = number.replace(/^0/, "");
-                        } else {
-                          handelChange(e, event?.id);
-                        }
-                      }}
-                      type="text"
-                      name="price"
-                      value={product && product[index]?.price}
-                      id="price"
-                      className="form-control"
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      value={product && product[index]?.quantity_available}
-                      name="quantity_available"
-                      id="quantity_available"
-                      className="form-control"
-                      onChange={(e) => {
-                        let number = e.target.value;
-                        if (isNaN(number) || number < 0 || number % 1 !== 0) {
-                          return;
-                        } else {
-                          handelChange(e, event?.id);
-                        }
-                      }}
-                    />
-                  </td>
-                  <td>
-                    <span
-                      onClick={() => {
-                        if (!event.isControldisabled) {
-                          handelDelete(event?.id);
-                        }
-                      }}
-                      style={{
-                        fontSize: "20px",
-                        fontWeight: "bolder",
-                        cursor: !event.isControldisabled ? "pointer" : "",
-                      }}
-                      aria-hidden="true"
-                    >
-                      &times;
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       );
     };

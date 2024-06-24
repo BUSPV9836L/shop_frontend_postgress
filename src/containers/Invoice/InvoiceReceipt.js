@@ -3,21 +3,48 @@ import { useLocation, useNavigate } from "react-router-dom";
 import String from "../../string";
 
 const InvoiceReceipt = () => {
+  const [invoiceData,setInvoiceData]=useState([]);
+
   const navigate = useNavigate();
   const data = useLocation();
-  console.log(data,"Fdfjkdjfj")
   const [grandTotal, setGrandTotal] = useState(0);
   const [totalQuantity, setTotalQuantity] = useState(0);
+
+  const getSalesDetails = async (invoice_no) => {
+    try {
+      const token = sessionStorage.getItem("accessToken");
+      const url = new URL(`${String.BASE_URL}/sales/saleswithinvoiceno`);
+      url.searchParams.append("user_id", sessionStorage.getItem("userid"));
+      url.searchParams.append("invoice_no", invoice_no);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (!data?.stackTrace) {
+        setInvoiceData(data);
+      }
+    } catch (error) {
+      alert(error.message)
+    }
+  };
+
+  useEffect(()=>{
+    getSalesDetails(data.state.invoice_no)
+  },[])
   useEffect(() => {
     let grand_total = 0;
     let total_quantity = 0;
-    data?.state?.forEach((e) => {
+    invoiceData?.forEach((e) => {
       grand_total = grand_total + parseFloat(e.total_price);
       total_quantity = total_quantity + parseInt(e.quantity);
     });
     setGrandTotal(grand_total);
     setTotalQuantity(total_quantity);
-  }, []);
+  }, [invoiceData]);
 
   useEffect(() => {
     if (grandTotal !== 0) {
@@ -39,20 +66,43 @@ const InvoiceReceipt = () => {
         </thead>
         <tbody>
           <tr>
-            <td>Lalto Electronics</td>
+            <td>{sessionStorage.getItem("username").toLocaleUpperCase()}</td>
           </tr>
           <tr>
-            <td>Tatisilwai ranchi, 835103, Near Beet Banglow, Shop No-34</td>
+            <td>{sessionStorage.getItem("companyaddress")}</td>
           </tr>
           <tr>
             <td>
-              Date :{" "}
+              Invoice Date :{" "}
               {new Date().getUTCDate() +
                 "-" +
                 new Date().getMonth() +
                 "-" +
                 new Date().getUTCFullYear()}
             </td>
+          </tr>
+        </tbody>
+      </table>
+    );
+  };
+  const showCustomerDetails = () => {
+    return (
+      <table className="table w-75 print-table">
+        <thead
+          style={{
+            backgroundColor: "var(--main-bg-color)",
+            color: "white",
+          }}
+          className="table-header"
+        >
+          <td>Customer Details</td>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{invoiceData[0]?.customer_name}</td>
+          </tr>
+          <tr>
+            <td>{invoiceData[0]?.phone_no}</td>
           </tr>
         </tbody>
       </table>
@@ -68,6 +118,7 @@ const InvoiceReceipt = () => {
         </div>
         <div className="row justify-content-center ">
           {showCompayDetails()}
+          {showCustomerDetails()}
           <table className="table w-75 print-table">
             <thead
               style={{
@@ -84,7 +135,7 @@ const InvoiceReceipt = () => {
               <td>Total</td>
             </thead>
             <tbody>
-              {data?.state?.map((e, index) => (
+              {invoiceData?.map((e, index) => (
                 <tr key={index}>
                   <td>{e?.name}</td>
                   <td>{e?.brand}</td>
@@ -103,7 +154,7 @@ const InvoiceReceipt = () => {
               <tr>
                 <td colSpan={4}>Grand Total</td>
                 <td>{totalQuantity&&parseFloat(totalQuantity).toFixed(2)}</td>
-                <td>{grandTotal}</td>
+                <td>{grandTotal?.toFixed(2)}</td>
               </tr>
             </tfoot>
           </table>

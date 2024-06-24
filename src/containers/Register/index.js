@@ -11,6 +11,7 @@ const Register = (props) => {
     email: "",
     password: "",
     confirmPassword: "",
+    address:""
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -47,10 +48,17 @@ const Register = (props) => {
     }
     return true;
   };
+  const validateCompanyAddress = () => {
+    if (form.address.split(" ").length<3) {
+      alert("Company address should be atleast three word.");
+      return false;
+    }
+    return true;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateEmail() && validatePassword() && validateConfirmPassword()) {
+    if (validateEmail() && validatePassword() && validateConfirmPassword()&&validateCompanyAddress()) {
       try {
         setIsLoading(true);
         const response = await fetch(`${String.BASE_URL}/users/register`, {
@@ -62,6 +70,7 @@ const Register = (props) => {
             username: form.companyName,
             email: form.email,
             password: form.password,
+            address:form.address
           }),
         });
         const data = await response.json();
@@ -69,10 +78,10 @@ const Register = (props) => {
           alert("Registration successful!");
           navigate("/");
         } else {
-          alert(data.message);
+         alert("Server Error!");
         }
       } catch (error) {
-        alert("Server Error!");
+        alert(error.message)
       } finally {
         setIsLoading(false);
       }
@@ -127,8 +136,20 @@ const Register = (props) => {
           <input
             onChange={handleChanges}
             name="companyName"
+            value={form.companyName}
             className="form-control"
             type="text"
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="companyName">Company Address</label>
+          <input
+            onChange={handleChanges}
+            name="address"
+            className="form-control"
+            type="text"
+            value={form.address}
             required
           />
         </div>
@@ -139,6 +160,7 @@ const Register = (props) => {
             name="email"
             className="form-control"
             type="email"
+            value={form.email}
             required
           />
         </div>
@@ -150,6 +172,7 @@ const Register = (props) => {
             type="password"
             name="password"
             className="form-control"
+            value={form.password}
             required
           />
         </div>
@@ -161,6 +184,7 @@ const Register = (props) => {
             type="password"
             name="confirmPassword"
             className="form-control"
+            value={form.confirmPassword}
             required
           />
         </div>

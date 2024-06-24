@@ -35,14 +35,15 @@ const Login = (props) => {
         sessionStorage.setItem("accessToken", data.accessToken);
         sessionStorage.setItem("userid", data.userid);
         sessionStorage.setItem("username", data.username);
+        sessionStorage.setItem("companyaddress", data.address);
         setTimeout(() => {
           navigate("/" + String.Dashboard);
         }, 500);
       } else {
-        alert(data.message);
+       alert("Server Error!");
       }
     } catch (error) {
-      alert("SereverError!");
+      alert(error.message)
     } finally {
       setIsLoading(false);
     }

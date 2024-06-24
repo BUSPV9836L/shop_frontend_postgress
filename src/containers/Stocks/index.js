@@ -30,7 +30,7 @@ const Stocks = () => {
         alert(data.message)
       }
     } catch (error) {
-      alert("Server Error");
+      alert(error.message)
     } finally {
       setLoading(false);
     }

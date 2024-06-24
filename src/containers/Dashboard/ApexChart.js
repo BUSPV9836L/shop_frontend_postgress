@@ -81,11 +81,9 @@ const ApexChart = () => {
         let series = generteDataAsRequired(data);
         let option = data.map((e) => e?.month);
         handeSetChart(series, option);
-      } else {
-        alert(data.message);
       }
     } catch (error) {
-      console.log(error);
+      alert(error.message);
     }
   };
   const generteDataAsRequired = (inputData) => {
