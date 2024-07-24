@@ -17,8 +17,9 @@ const Purchase = () => {
       quantity_available: "",
     },
   ]);
-  const [rowData, setRowData] = useState([]);
 
+  const [rowData, setRowData] = useState([]);
+  const [rowData2,setRowData2]=useState([]);
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddNewClicked, setIsAddNewClicked] = useState(false);
@@ -59,6 +60,35 @@ const Purchase = () => {
       const data = await response.json();
       if (!data?.stackTrace) {
         setRowData(data);
+      } else {
+        alert("Server Error!");
+      }
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setIsModalOpen(false);
+      setIsSaveing(false);
+      setLoading(false);
+    }
+  };
+  const getPurchaseWithInvoice = async (invoice_no) => {
+    try {
+      setIsSaveing(true);
+      setLoading(true);
+      const token = sessionStorage.getItem("accessToken");
+      const url = new URL(`${String.BASE_URL}/purchases/getPurchaseWithInvoice`);
+      url.searchParams.append("user_id", sessionStorage.getItem("userid"));
+      url.searchParams.append("invoice_no", invoice_no);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (!data?.stackTrace) {
+        setRowData2(data);
       } else {
         alert("Server Error!");
       }
@@ -181,15 +211,18 @@ const Purchase = () => {
   const PurchaseTable = () => {
     const colDefs = [
       {
-        headerName: "Product Name",
-        field: "name",
+        headerName: "Invoice No.",
+        field: "puchase_invoice_no",
         flex: 1,
         cellStyle: { color: "var(--main-bg-color)", cursor: "pointer" },
+        cellRenderer: (params) => {
+          return <span>{params.data.puchase_invoice_no.split("purchase")[1]}</span>
+        }
       },
-      { headerName: "Brand", field: "brand", flex: 1 },
-      { headerName: "Category", field: "category", flex: 1 },
-      { headerName: "MRP", field: "price", flex: 1 },
-      { headerName: "Purcahse Date", field: "created_at", flex: 1 },
+      { headerName: "Total Amount", field: "price", flex: 1 },
+      { headerName: "Purcahse Date", field: "created_at", flex: 1 ,cellRenderer: (params) => {
+        return <span>{params.data.created_at.split("T")[0]}</span>
+      }},
       {
         headerName: "Available Quantity",
         field: "quantity_available",
@@ -204,6 +237,55 @@ const Purchase = () => {
       >
         <AgGridReact
           rowData={rowData}
+          columnDefs={colDefs}
+          defaultColDef={{
+            sortable: true,
+            filter: true,
+            resizable: true,
+            width: 100,
+            autoHeight: true,
+          }}
+          suppressCellSelection={true}
+          gridOptions={{ headerHeight: 30, rowHeight: 28 }}
+          rowSelection="multiple"
+          pagination={true}
+          onGridReady={onGridReady}
+          paginationPageSize={10}
+          enableCellTextSelection={true}
+          domLayout={"autoHeight"}
+          onCellClicked={(event) => {
+            if (event.colDef.headerName === "Invoice No.") {
+              getPurchaseWithInvoice(event?.data?.puchase_invoice_no)
+            }
+          }}
+        />
+      </div>
+    );
+  };
+  const PurchaseTableDetails = () => {
+    const colDefs = [
+      {
+        headerName: "Product Name",
+        field: "name",
+        flex: 1,
+      },
+      { headerName: "Brand", field: "brand", flex: 1 },
+      { headerName: "Category", field: "category", flex: 1 },
+      { headerName: "MRP", field: "price", flex: 1 },
+      {
+        headerName: "Available Quantity",
+        field: "quantity_available",
+        flex: 1,
+      },
+    ];
+
+    return (
+      <div
+        className="ag-theme-quartz custom-ag-theme"
+        style={{ width: "100%", paddingRight: "20px" }}
+      >
+        <AgGridReact
+          rowData={rowData2}
           columnDefs={colDefs}
           defaultColDef={{
             sortable: true,
@@ -610,6 +692,7 @@ const Purchase = () => {
         </button>
       </div>
       {PurchaseTable()}
+      {rowData2?.length>0&&PurchaseTableDetails()}
       {addIteamInPurchasePopUp()}
       {isModalOpen && <div className="modal-backdrop fade show"></div>}
     </div>

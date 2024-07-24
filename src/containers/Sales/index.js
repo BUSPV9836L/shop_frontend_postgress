@@ -114,7 +114,7 @@ const Sales = (props) => {
               className="btn btn-primary"
               onClick={async () => {
                 navigate("/" + String.InvoiceReceipt, {
-                  state: {invoice_no:params.data.invoice_no},
+                  state: { invoice_no: params.data.invoice_no },
                 });
               }}
             >
