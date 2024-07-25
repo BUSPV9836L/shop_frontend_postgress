@@ -4,8 +4,11 @@ import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import String from "../../string";
 import { useLocation } from "react-router";
+import { useAlert } from "../../CustomHooks/useAlert";
+import { DANGER, PRIMARY } from "../../component/Alert";
 
 const Stocks = () => {
+  const {Alert}=useAlert();
   const location = useLocation();
   const [rowData, setRowData] = useState([]);
   const [gridApi, setGridApi] = useState(null);
@@ -27,10 +30,10 @@ const Stocks = () => {
       if (!data?.stackTrace) {
         setRowData(data);
       }else{
-        alert(data.message)
+        Alert(PRIMARY,data.message)
       }
     } catch (error) {
-      alert(error.message)
+      Alert(DANGER,error.message)
     } finally {
       setLoading(false);
     }

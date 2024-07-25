@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import NetworkStatus from "../NetworkStatus";
 
@@ -16,9 +16,13 @@ const Header = (props) => {
         }}
         style={{
           position: "absolute",
-          right: "5%",
-          top: "50%",
+          right: "2%",
+          top: "49%",
           cursor: "pointer",
+          borderRadius:"0",
+          color:"white",
+          backgroundColor:"var(--main-bg-color)",
+          border:"2px solid white"
         }}
         class="dropdown-menu show px-4 py-3 mt-4"
       >

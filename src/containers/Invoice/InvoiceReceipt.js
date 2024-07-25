@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import String from "../../string";
+import { useAlert } from "../../CustomHooks/useAlert";
+import { DANGER } from "../../component/Alert";
 
 const InvoiceReceipt = () => {
+  const {Alert}=useAlert();
   const [invoiceData,setInvoiceData]=useState([]);
 
   const navigate = useNavigate();
@@ -28,7 +31,7 @@ const InvoiceReceipt = () => {
         setInvoiceData(data);
       }
     } catch (error) {
-      alert(error.message)
+      Alert(DANGER,error.message)
     }
   };
 

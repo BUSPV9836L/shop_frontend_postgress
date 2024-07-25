@@ -6,7 +6,8 @@ const String={
     Sales:"Sales",
     Invoice:"Invoice",
     Stocks:"Stocks",
-    InvoiceReceipt:"InvoiceReceipt"
+    InvoiceReceipt:"InvoiceReceipt",
+    Supplier:"Supplier"
 }
 
 export default String;

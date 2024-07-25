@@ -5,8 +5,11 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import String from "../../string";
 import { useLocation } from "react-router";
 import moment from "moment";
+import { useAlert } from "../../CustomHooks/useAlert";
+import { DANGER, PRIMARY, SUCCESS } from "../../component/Alert";
 
 const Purchase = () => {
+  const { Alert } = useAlert();
   const [product, setProduct] = useState([
     {
       id: 0,
@@ -15,22 +18,22 @@ const Purchase = () => {
       category: "",
       price: "",
       quantity_available: "",
+      supplier_name: ""
     },
   ]);
 
   const [rowData, setRowData] = useState([]);
-  const [rowData2,setRowData2]=useState([]);
+  const [rowData2, setRowData2] = useState([]);
   const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAddNewClicked, setIsAddNewClicked] = useState(false);
   const [popupTitle, setPopUpTitle] = useState("");
   const [idFromValid, setIsFromValid] = useState(false);
-
   const [gridApi, setGridApi] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isSaving, setIsSaveing] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
-
+  const [supplier, setSupplier] = useState([])
   const getAllPurchase = async () => {
     try {
       setIsSaveing(true);
@@ -60,12 +63,12 @@ const Purchase = () => {
       const data = await response.json();
       if (!data?.stackTrace) {
         setRowData(data);
-      }else{
-        alert(data.message);
+      } else {
+        Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      alert(error.message);
-    }finally {
+      Alert(DANGER, error.message);
+    } finally {
       setIsModalOpen(false);
       setIsSaveing(false);
       setLoading(false);
@@ -89,11 +92,11 @@ const Purchase = () => {
       const data = await response.json();
       if (!data?.stackTrace) {
         setRowData2(data);
-      }else{
-        alert(data.message);
+      } else {
+        Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      alert(error.message);
+      Alert(DANGER, error.message);
     } finally {
       setIsModalOpen(false);
       setIsSaveing(false);
@@ -109,6 +112,7 @@ const Purchase = () => {
         price: e.price,
         quantity_available: e.quantity_available,
         user_id: sessionStorage.getItem("userid"),
+        supplier_name: e.supplier_name
       };
     });
     setIsSaveing(true);
@@ -124,12 +128,12 @@ const Purchase = () => {
       });
       const data = await response.json();
       if (!data?.stackTrace) {
-        alert("Record Saved Succesfully!");
-      }else{
-        alert(data.message);
+        Alert(SUCCESS, "Record Saved Succesfully!");
+      } else {
+        Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      alert(error.message);
+      Alert(DANGER, error.message);
     } finally {
       setIsModalOpen(false);
       setIsSaveing(false);
@@ -181,18 +185,44 @@ const Purchase = () => {
           },
         ]);
         getAllPurchase();
-        alert("Record Updated Succesfully!");
-      }else{
-        alert(data.message);
+        setRowData2([])
+        Alert(SUCCESS, "Record Updated Succesfully!");
+      } else {
+        Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      alert(error.message);
+      Alert(DANGER, error.message);
     } finally {
       setIsModalOpen(false);
     }
   };
+  const getAllSupplier = async () => {
+    const url = new URL(`${String.BASE_URL}/suppliers`);
+    url.searchParams.append("user_id", sessionStorage.getItem("userid"));
+    try {
+      const token = sessionStorage.getItem("accessToken");
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      if (!data?.stackTrace) {
+        setSupplier(data);
+      } else {
+        Alert(PRIMARY, data.message);
+      }
+    } catch (error) {
+      Alert(DANGER, error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
     getAllPurchase();
+    getAllSupplier()
   }, []);
 
   const onGridReady = (params) => {
@@ -220,9 +250,11 @@ const Purchase = () => {
         }
       },
       { headerName: "Total Amount", field: "price", flex: 1 },
-      { headerName: "Purcahse Date", field: "created_at", flex: 1 ,cellRenderer: (params) => {
-        return <span>{params.data.created_at.split("T")[0]}</span>
-      }},
+      {
+        headerName: "Purcahse Date", field: "created_at", flex: 1, cellRenderer: (params) => {
+          return <span>{params.data.created_at.split("T")[0]}</span>
+        }
+      },
       {
         headerName: "Available Quantity",
         field: "quantity_available",
@@ -264,6 +296,12 @@ const Purchase = () => {
   };
   const PurchaseTableDetails = () => {
     const colDefs = [
+      {
+        headerName: "Supplier Name",
+        field: "supplier_name",
+        flex: 1,
+
+      },
       {
         headerName: "Product Name",
         field: "name",
@@ -386,6 +424,16 @@ const Purchase = () => {
                       textAlign: "left",
                     }}
                   >
+                    Supplier
+                  </th>
+                  <th
+                    scope="col"
+                    style={{
+                      background: "var(--main-bg-color",
+                      color: "white",
+                      textAlign: "left",
+                    }}
+                  >
                     Product Name
                   </th>
                   <th
@@ -471,6 +519,21 @@ const Purchase = () => {
                       )}
                     </td>
                     <td>{index + 1}</td>
+                    <td>
+                      <select
+                        type="text"
+                        name="supplier_name"
+                        value={product && product[index]?.supplier_name}
+                        id="name"
+                        className="form-control"
+                        onChange={(e) => handelChange(e, event?.id)}
+                      >
+                        <option value="" selected disabled>Select Supplier</option>
+                        {supplier.map(e => {
+                          return <option>{e?.supplier_name}</option>
+                        })}
+                      </select>
+                    </td>
                     <td>
                       <input
                         type="text"
@@ -618,7 +681,8 @@ const Purchase = () => {
           (name == "category" ? value : e.category) &&
           (name == "brand" ? value : e.brand) &&
           (name == "price" ? value : e.price) &&
-          (name == "quantity_available" ? value : e.quantity_available)
+          (name == "quantity_available" ? value : e.quantity_available) &&
+          (name == "supplier_name" ? value : e.supplier_name)
         ) {
           setIsFromValid(true);
         } else {
@@ -693,7 +757,7 @@ const Purchase = () => {
         </button>
       </div>
       {PurchaseTable()}
-      {rowData2?.length>0&&PurchaseTableDetails()}
+      {rowData2?.length > 0 && PurchaseTableDetails()}
       {addIteamInPurchasePopUp()}
       {isModalOpen && <div className="modal-backdrop fade show"></div>}
     </div>

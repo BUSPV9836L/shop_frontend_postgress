@@ -3,8 +3,11 @@ import { FaUserPlus } from "react-icons/fa";
 import String from "../../string";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { useAlert } from "../../CustomHooks/useAlert";
+import { DANGER, PRIMARY, SUCCESS } from "../../component/Alert";
 
 const Register = (props) => {
+  const {Alert}=useAlert();
   const navigate = useNavigate();
   const [form, setForm] = useState({
     companyName: "",
@@ -26,7 +29,7 @@ const Register = (props) => {
   const validateEmail = () => {
     const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/;
     if (!emailRegex.test(form.email)) {
-      alert("Please enter a valid email address!");
+      Alert(PRIMARY,"Please enter a valid email address!");
       return false;
     }
     return true;
@@ -35,7 +38,7 @@ const Register = (props) => {
   const validatePassword = () => {
     const passwordRegex = /^.{6,}$/;
     if (!passwordRegex.test(form.password)) {
-      alert("Password must be at least 6 characters long!");
+      Alert(PRIMARY,"Password must be at least 6 characters long!");
       return false;
     }
     return true;
@@ -43,14 +46,14 @@ const Register = (props) => {
 
   const validateConfirmPassword = () => {
     if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match!");
+      Alert(PRIMARY,"Passwords do not match!");
       return false;
     }
     return true;
   };
   const validateCompanyAddress = () => {
     if (form.address.split(" ").length<3) {
-      alert("Company address should be atleast three word.");
+      Alert(PRIMARY,"Company address should be atleast three word.");
       return false;
     }
     return true;
@@ -75,13 +78,13 @@ const Register = (props) => {
         });
         const data = await response.json();
         if (data.success) {
-          alert("Registration successful!");
+          Alert(SUCCESS,"Registration successful!");
           navigate("/");
         }else{
-          alert(data.message);
+          Alert(PRIMARY,data.message);
         }
       } catch (error) {
-        alert(error.message);
+        Alert(DANGER,error.message);
       } finally {
         setIsLoading(false);
       }

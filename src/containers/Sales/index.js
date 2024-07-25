@@ -6,8 +6,11 @@ import { useState } from "react";
 import String from "../../string";
 import moment from "moment";
 import { useLocation, useNavigate } from "react-router";
+import { useAlert } from "../../CustomHooks/useAlert";
+import { DANGER } from "../../component/Alert";
 
 const Sales = (props) => {
+  const {Alert}=useAlert();
   const navigate = useNavigate();
   const [rowData, setRowData] = useState([]);
   const [rowData2, setRowData2] = useState([]);
@@ -43,7 +46,7 @@ const Sales = (props) => {
         setRowData(data);
       }
     } catch (error) {
-      alert(error.message)
+      Alert(DANGER,error.message)
     } finally {
       setLoading(false);
     }
@@ -66,7 +69,7 @@ const Sales = (props) => {
         setRowData2(data);
       }
     } catch (error) {
-      alert(error.message)
+      Alert(DANGER,error.message)
     } finally {
       setLoading(false);
     }

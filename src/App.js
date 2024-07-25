@@ -15,6 +15,7 @@ import Invoice from "../src/containers/Invoice";
 import Stocks from "./containers/Stocks";
 import InvoiceReceipt from "./containers/Invoice/InvoiceReceipt";
 import Register from "./containers/Register";
+import Supplier from "./containers/Supplier";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -71,9 +72,14 @@ function App() {
                 element: <InvoiceReceipt />,
               },
               {
+                path: "/" + String.Supplier,
+                element: <Supplier />,
+              },  
+              {
                 path: "/",
                 element: <Navigate to={"/" + String.Dashboard} replace />,
               },
+              
               {
                 path: "*",
                 element: <Navigate to={"/" + String.Dashboard} replace />,

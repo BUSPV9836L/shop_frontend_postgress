@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import String from "../../string";
 import { useNavigate } from "react-router";
+import { useAlert } from "../../CustomHooks/useAlert";
+import { DANGER, PRIMARY, SUCCESS } from "../../component/Alert";
 
 const Invoice = () => {
+  const { Alert } = useAlert();
   const [stockOption, setStockOption] = useState([]);
   const [isCreatingSale, setIsCreatingSale] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,11 +44,11 @@ const Invoice = () => {
       const data = await response.json();
       if (!data?.stackTrace) {
         setStockOption(data);
-      }else{
-        alert(data.message);
+      } else {
+        Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      alert(error.message);
+      Alert(DANGER, error.message);
     } finally {
       setIsLoading(false);
     }
@@ -64,11 +67,11 @@ const Invoice = () => {
       const data = await response.json();
       if (!data?.stackTrace) {
         setInvoiceNo(data.invoice_no);
-      }else{
-        alert(data.message);
+      } else {
+        Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      alert(error.message);
+      Alert(DANGER, error.message);
     } finally {
       setIsLoading(false);
     }
@@ -95,15 +98,16 @@ const Invoice = () => {
       });
       const data = await response.json();
       if (!data?.stackTrace) {
-        alert("Record saved succesfully!");
-      } else{
-        alert(data.message);
+        Alert(SUCCESS, "Record saved succesfully!");
+      } else {
+        Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      alert(error.message);
+      Alert(DANGER, error.message);
     } finally {
       setIsLoading(false);
       setIsCreatingSale(false);
+      navigate("/"+String.Sales)
     }
   };
 
@@ -122,18 +126,18 @@ const Invoice = () => {
       let res = product.map((e) =>
         e?.id === id
           ? {
-              id: id,
-              name: value,
-              brand: selectProduct?.brand,
-              category: selectProduct?.category,
-              price: selectProduct?.price,
-              quantity_available: selectProduct?.quantity_available,
-              quantity: "",
-              total_price: "",
-              mrp: selectProduct?.price,
-              phone_no: e.phone_no,
-              customer_name: e.customer_name,
-            }
+            id: id,
+            name: value,
+            brand: selectProduct?.brand,
+            category: selectProduct?.category,
+            price: selectProduct?.price,
+            quantity_available: selectProduct?.quantity_available,
+            quantity: "",
+            total_price: "",
+            mrp: selectProduct?.price,
+            phone_no: e.phone_no,
+            customer_name: e.customer_name,
+          }
           : e
       );
       setProduct(res);
@@ -141,12 +145,12 @@ const Invoice = () => {
       let res = product.map((e) =>
         e?.id === id
           ? {
-              ...e,
-              [name]: value,
-              total_price:
-                ((name === "quantity" ? value : e.quantity) || 0) *
-                ((name === "price" ? value : e.price) || 0),
-            }
+            ...e,
+            [name]: value,
+            total_price:
+              ((name === "quantity" ? value : e.quantity) || 0) *
+              ((name === "price" ? value : e.price) || 0),
+          }
           : e
       );
       setProduct(res);
@@ -154,9 +158,9 @@ const Invoice = () => {
       let res = product.map((e) =>
         e?.id === id
           ? {
-              ...e,
-              [name]: value,
-            }
+            ...e,
+            [name]: value,
+          }
           : e
       );
       setProduct(res);
@@ -181,10 +185,10 @@ const Invoice = () => {
 
   const handelAddNew = () => {
     if (product.length >= stockOption.length) {
-      alert("Max row reached!");
+      Alert(PRIMARY, "Max row reached!");
       return;
     }
-    
+
     setIsFromValid(false);
     const insertNew = {
       id: Math.random() * 100,
@@ -233,7 +237,7 @@ const Invoice = () => {
                   background: "var(--main-bg-color",
                   color: "white",
                   textAlign: "left",
-                  
+
                 }}
                 scope="col"
               >
@@ -373,13 +377,13 @@ const Invoice = () => {
           <tbody>
             {product.map((event, index) => (
               <tr key={event?.id}>
-                <td style={{borderRight:"2px solid gray", cursor:"pointer"}}>
+                <td style={{ borderRight: "2px solid gray", cursor: "pointer" }}>
                   {index === product.length - 1 && (
                     <span
                       onClick={handelAddNew}
                       className="add-icon"
                       aria-hidden="true"
-                      
+
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -505,7 +509,7 @@ const Invoice = () => {
                       } else if (
                         number > (product && product[index]?.quantity_available)
                       ) {
-                        alert(
+                        Alert(PRIMARY,
                           "Quantity cannot be greater than available quantity!"
                         );
                         return;
@@ -524,7 +528,7 @@ const Invoice = () => {
                     className="form-control"
                   />
                 </td>
-                <td style={{borderLeft:"2px solid gray", cursor:"pointer"}}>
+                <td style={{ borderLeft: "2px solid gray", cursor: "pointer" }}>
                   <span
                     onClick={() => handelDelete(event?.id)}
                     className="delete-icon"
@@ -562,7 +566,7 @@ const Invoice = () => {
       <div className="text-end" style={{ marginRight: "20px" }}>
         <button
           onClick={createNewInvoice}
-          className="btn mb-3  btn-primary"
+          className="btn mb-3"
           disabled={!idFromValid}
         >
           Create Sale

@@ -4,8 +4,11 @@ import String from "../../string";
 import moment from "moment";
 import { useNavigate } from "react-router";
 import ApexChart from "./ApexChart";
+import { useAlert } from "../../CustomHooks/useAlert";
+import { DANGER, PRIMARY, SUCCESS } from "../../component/Alert";
 
 const Dashboard = () => {
+  const {Alert}=useAlert();
   const [dashboardData, setDashboardData] = useState([]);
   const navigate = useNavigate();
   const [dashboardJson, setDashboardJson] = useState([
@@ -77,7 +80,7 @@ const Dashboard = () => {
         setDashboardJson(json);
         setDashboardData(data);
       }else{
-        alert(data.message)
+        Alert(PRIMARY,data.message)
       }
     } catch (error) {
       setDashboardJson([
@@ -100,7 +103,7 @@ const Dashboard = () => {
           redirect: "/Stock",
         },
       ]);
-      alert("Server Error!");
+      Alert(DANGER,error.message);
     } finally {
       setIsLoading(false);
     }
@@ -128,10 +131,10 @@ const Dashboard = () => {
       if (!data?.stackTrace) {
         setProfit(data?.profit);
       }else{
-        alert(data.message);
+        Alert(PRIMARY,data.message);
       }
     } catch (error) {
-      alert(error.message);
+      Alert(DANGER,error.message);
     } finally {
       setIsLoading(false);
     }

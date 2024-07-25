@@ -33,6 +33,15 @@ const SideBar = () => {
           Dashboard
         </MenuItem>
         <MenuItem
+          component={<Link to={"/"+String.Supplier} />}
+          active={location.pathname === "/"+String.Supplier}
+          style={{
+            color: location.pathname === "/"+String.Supplier ? "var(--main-bg-color)" : "black",
+          }}
+        >
+          Supplier List
+        </MenuItem>
+        <MenuItem
           component={<Link to={"/"+String.Stocks} />}
           active={location.pathname === "/"+String.Stocks}
           style={{

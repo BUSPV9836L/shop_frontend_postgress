@@ -127,3 +127,17 @@ body {
     width: 1200px;
   }
 }
+.custom-alert {
+  animation: slideInFromLeft .5s ease-out;
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 50%;
+    transform: translateX(-100%); 
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%); 
+  }
+}

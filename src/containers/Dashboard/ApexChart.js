@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import ReactApexChart from "react-apexcharts";
 import String from "../../string";
-
+import { useAlert } from "../../CustomHooks/useAlert";
+import { DANGER,SUCCESS,PRIMARY } from "../../component/Alert";
 const ApexChart = () => {
+  const {Alert}=useAlert()
   const [chartData, setChartData] = useState({
     series: [],
     options: {},
@@ -83,7 +85,7 @@ const ApexChart = () => {
         handeSetChart(series, option);
       }
     } catch (error) {
-      alert(error.message);
+      Alert(DANGER,error.message);
     }
   };
   const generteDataAsRequired = (inputData) => {
