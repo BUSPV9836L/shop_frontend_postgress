@@ -39,12 +39,12 @@ const Login = (props) => {
         setTimeout(() => {
           navigate("/" + String.Dashboard);
         }, 500);
-      } else {
-       alert("Server Error!");
+      }else{
+        alert(data.message);
       }
     } catch (error) {
-      alert(error.message)
-    } finally {
+      alert(error.message);
+    }finally {
       setIsLoading(false);
     }
   };

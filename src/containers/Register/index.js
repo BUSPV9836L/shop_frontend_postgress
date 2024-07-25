@@ -77,11 +77,11 @@ const Register = (props) => {
         if (data.success) {
           alert("Registration successful!");
           navigate("/");
-        } else {
-         alert("Server Error!");
+        }else{
+          alert(data.message);
         }
       } catch (error) {
-        alert(error.message)
+        alert(error.message);
       } finally {
         setIsLoading(false);
       }

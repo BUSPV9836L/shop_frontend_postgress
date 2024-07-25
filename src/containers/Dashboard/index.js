@@ -128,10 +128,10 @@ const Dashboard = () => {
       if (!data?.stackTrace) {
         setProfit(data?.profit);
       }else{
-        alert("Server Error!")
+        alert(data.message);
       }
     } catch (error) {
-      alert(error.message)
+      alert(error.message);
     } finally {
       setIsLoading(false);
     }

@@ -60,12 +60,12 @@ const Purchase = () => {
       const data = await response.json();
       if (!data?.stackTrace) {
         setRowData(data);
-      } else {
-        alert("Server Error!");
+      }else{
+        alert(data.message);
       }
     } catch (error) {
       alert(error.message);
-    } finally {
+    }finally {
       setIsModalOpen(false);
       setIsSaveing(false);
       setLoading(false);
@@ -89,8 +89,8 @@ const Purchase = () => {
       const data = await response.json();
       if (!data?.stackTrace) {
         setRowData2(data);
-      } else {
-        alert("Server Error!");
+      }else{
+        alert(data.message);
       }
     } catch (error) {
       alert(error.message);
@@ -125,8 +125,8 @@ const Purchase = () => {
       const data = await response.json();
       if (!data?.stackTrace) {
         alert("Record Saved Succesfully!");
-      } else {
-        alert("Server Error!");
+      }else{
+        alert(data.message);
       }
     } catch (error) {
       alert(error.message);
@@ -182,8 +182,8 @@ const Purchase = () => {
         ]);
         getAllPurchase();
         alert("Record Updated Succesfully!");
-      } else {
-        alert("Server Error!");
+      }else{
+        alert(data.message);
       }
     } catch (error) {
       alert(error.message);
@@ -268,6 +268,7 @@ const Purchase = () => {
         headerName: "Product Name",
         field: "name",
         flex: 1,
+        cellStyle: { color: "var(--main-bg-color)", cursor: "pointer" },
       },
       { headerName: "Brand", field: "brand", flex: 1 },
       { headerName: "Category", field: "category", flex: 1 },

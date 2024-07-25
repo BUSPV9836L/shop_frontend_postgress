@@ -41,8 +41,8 @@ const Invoice = () => {
       const data = await response.json();
       if (!data?.stackTrace) {
         setStockOption(data);
-      } else {
-        alert("Server Error!");
+      }else{
+        alert(data.message);
       }
     } catch (error) {
       alert(error.message);
@@ -64,8 +64,8 @@ const Invoice = () => {
       const data = await response.json();
       if (!data?.stackTrace) {
         setInvoiceNo(data.invoice_no);
-      } else {
-        alert("Server Error!");
+      }else{
+        alert(data.message);
       }
     } catch (error) {
       alert(error.message);
@@ -96,8 +96,8 @@ const Invoice = () => {
       const data = await response.json();
       if (!data?.stackTrace) {
         alert("Record saved succesfully!");
-      } else {
-        alert("Server Error!");
+      } else{
+        alert(data.message);
       }
     } catch (error) {
       alert(error.message);
