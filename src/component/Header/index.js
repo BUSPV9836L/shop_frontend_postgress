@@ -19,10 +19,10 @@ const Header = (props) => {
           right: "2%",
           top: "49%",
           cursor: "pointer",
-          borderRadius:"0",
-          color:"white",
-          backgroundColor:"var(--main-bg-color)",
-          border:"2px solid white"
+          borderRadius: "0",
+          color: "white",
+          backgroundColor: "var(--main-bg-color)",
+          border: "2px solid white"
         }}
         class="dropdown-menu show px-4 py-3 mt-4"
       >
@@ -45,14 +45,11 @@ const Header = (props) => {
     >
       <div className=" col-6">
         <h5 style={{ fontSize: "19px", fontWeight: "900", marginLeft: "2%" }}>
-          SALES MANAGEMENT
+          {sessionStorage.getItem("username").toLocaleUpperCase()}
         </h5>
       </div>
       <div className="col-6">
         <div className=" row justify-content-end">
-          <div style={{ width: "fit-content" }} className=" mt-2 col-3">
-            <h4>{sessionStorage.getItem("username").toLocaleUpperCase()}</h4>
-          </div>
           <div style={{ width: "fit-content" }} className=" mt-2 col-3">
             Network Status: {<NetworkStatus />}
           </div>
