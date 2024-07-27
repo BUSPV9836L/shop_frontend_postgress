@@ -16,6 +16,7 @@ import Stocks from "./containers/Stocks";
 import InvoiceReceipt from "./containers/Invoice/InvoiceReceipt";
 import Register from "./containers/Register";
 import Supplier from "./containers/Supplier";
+import PurchaseList from "./containers/PurchaseList";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -56,11 +57,16 @@ function App() {
                 element: <Purchase />,
               },
               {
+                path: "/" + String.Purchase_List,
+                element: <PurchaseList />,
+              },
+              
+              {
                 path: "/" + String.Sales,
                 element: <Sales />,
               },
               {
-                path: "/" + String.Invoice,
+                path: "/" + String.Create_Sale,
                 element: <Invoice />,
               },
               {
