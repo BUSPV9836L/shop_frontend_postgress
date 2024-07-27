@@ -464,6 +464,7 @@ const PurchaseList = () => {
                     <td>{index + 1}</td>
                     <td>
                       <select
+                        disabled
                         type="text"
                         name="supplier_name"
                         value={product && product[index]?.supplier_name}
@@ -479,6 +480,7 @@ const PurchaseList = () => {
                     </td>
                     <td>
                       <input
+                        disabled
                         type="text"
                         name="name"
                         value={product && product[index]?.name}
@@ -489,6 +491,7 @@ const PurchaseList = () => {
                     </td>
                     <td>
                       <input
+                        disabled
                         type="text"
                         name="brand"
                         value={product && product[index]?.brand}
@@ -499,6 +502,7 @@ const PurchaseList = () => {
                     </td>
                     <td>
                       <input
+                        disabled
                         type="text"
                         name="category"
                         value={product && product[index]?.category}
@@ -509,6 +513,7 @@ const PurchaseList = () => {
                     </td>
                     <td>
                       <input
+                        disabled
                         onChange={(e) => {
                           let number = e.target.value;
                           if (isNaN(number) || number < 0) {
@@ -528,6 +533,7 @@ const PurchaseList = () => {
                     </td>
                     <td>
                       <input
+
                         type="text"
                         value={product && product[index]?.quantity_available}
                         name="quantity_available"

@@ -62,13 +62,13 @@ const Dashboard = () => {
             title: "Total Sales",
             count: data.totalsale,
             color: "blue",
-            redirect: "/Sales",
+            redirect: "/"+String.Sales,
           },
           {
             title: "Total Purchase",
             count: data.totalpurchase,
             color: "green",
-            redirect: "/Purchase",
+            redirect: "/"+String.Purchase_List,
           },
           {
             title: "Total Stock",
