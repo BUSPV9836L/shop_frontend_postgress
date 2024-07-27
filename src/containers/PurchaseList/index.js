@@ -3,12 +3,12 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import String from "../../string";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
 import moment from "moment";
 import { useAlert } from "../../CustomHooks/useAlert";
 import { DANGER, PRIMARY, SUCCESS } from "../../component/Alert";
 
-const Purchase = () => {
+const PurchaseList = () => {
   const { Alert } = useAlert();
   const [product, setProduct] = useState([
     {
@@ -21,59 +21,133 @@ const Purchase = () => {
       supplier_name: ""
     },
   ]);
-  const navigate=useNavigate()
+
+  const [rowData, setRowData] = useState([]);
+  const [rowData2, setRowData2] = useState([]);
+  const location = useLocation();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddNewClicked, setIsAddNewClicked] = useState(false);
+  const [popupTitle, setPopUpTitle] = useState("");
   const [idFromValid, setIsFromValid] = useState(false);
+  const [gridApi, setGridApi] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isSaving, setIsSaveing] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false);
   const [supplier, setSupplier] = useState([])
-  const createPurchase = async () => {
-    let json = product.map((e) => {
-      return {
-        name: e.name,
-        brand: e.brand,
-        category: e.category,
-        price: e.price,
-        quantity_available: e.quantity_available,
-        user_id: sessionStorage.getItem("userid"),
-        supplier_name: e.supplier_name
-      };
-    });
-    setLoading(true);
+  const getAllPurchase = async () => {
     try {
+      setIsSaveing(true);
+      setLoading(true);
       const token = sessionStorage.getItem("accessToken");
-      const response = await fetch(`${String.BASE_URL}/purchases`, {
-        method: "POST",
+      const url = new URL(`${String.BASE_URL}/purchases`);
+      url.searchParams.append(
+        "startdate",
+        location?.state?.startDate
+          ? moment(location?.state?.startDate).format("DD/MM/YYYY")
+          : ""
+      );
+      url.searchParams.append(
+        "enddate",
+        location?.state?.endDate
+          ? moment(location?.state?.endDate).format("DD/MM/YYYY")
+          : ""
+      );
+      url.searchParams.append("user_id", sessionStorage.getItem("userid"));
+      const response = await fetch(url, {
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(json),
       });
       const data = await response.json();
       if (!data?.stackTrace) {
-        Alert(SUCCESS, "Record Saved Succesfully!");
-        navigate("/"+String.Purchase_List)
+        setRowData(data);
       } else {
         Alert(PRIMARY, data.message);
       }
     } catch (error) {
       Alert(DANGER, error.message);
     } finally {
-      setProduct([
-        {
-          id: 0,
-          name: "",
-          brand: "",
-          category: "",
-          price: "",
-          quantity_available: "",
+      setIsModalOpen(false);
+      setIsSaveing(false);
+      setLoading(false);
+    }
+  };
+  const getPurchaseWithInvoice = async (invoice_no) => {
+    try {
+      setIsSaveing(true);
+      setLoading(true);
+      const token = sessionStorage.getItem("accessToken");
+      const url = new URL(`${String.BASE_URL}/purchases/getPurchaseWithInvoice`);
+      url.searchParams.append("user_id", sessionStorage.getItem("userid"));
+      url.searchParams.append("invoice_no", invoice_no);
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
-      ]);
-
-      setLoading(false)
+      });
+      const data = await response.json();
+      if (!data?.stackTrace) {
+        setRowData2(data);
+      } else {
+        Alert(PRIMARY, data.message);
+      }
+    } catch (error) {
+      Alert(DANGER, error.message);
+    } finally {
+      setIsModalOpen(false);
+      setIsSaveing(false);
+      setLoading(false);
+    }
+  };
+  const updatePurchase = async () => {
+    setIsSaveing(true);
+    try {
+      const token = sessionStorage.getItem("accessToken");
+      const response = await fetch(`${String.BASE_URL}/purchases`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          name: product[0].name,
+          brand: product[0].brand,
+          category: product[0].category,
+          price: product[0].price,
+          quantity_available: product[0].quantity_available,
+          id: product[0].id,
+          user_id: sessionStorage.getItem("userid"),
+        }),
+      });
+      const data = await response.json();
+      if (!data?.stackTrace) {
+        setProduct([
+          {
+            id: 0,
+            name: "",
+            brand: "",
+            category: "",
+            price: "",
+            quantity_available: "",
+          },
+        ]);
+        getAllPurchase();
+        setRowData2([])
+        Alert(SUCCESS, "Record Updated Succesfully!");
+      } else {
+        Alert(PRIMARY, data.message);
+      }
+    } catch (error) {
+      Alert(DANGER, error.message);
+    } finally {
+      setIsModalOpen(false);
     }
   };
   const getAllSupplier = async () => {
-    setLoading(true)
     const url = new URL(`${String.BASE_URL}/suppliers`);
     url.searchParams.append("user_id", sessionStorage.getItem("userid"));
     try {
@@ -98,19 +172,169 @@ const Purchase = () => {
     }
   };
   useEffect(() => {
+    getAllPurchase();
     getAllSupplier()
   }, []);
+
+  const onGridReady = (params) => {
+    setGridApi(params.api);
+  };
+
+  useEffect(() => {
+    if (gridApi) {
+      if (loading) {
+        gridApi.showLoadingOverlay();
+      } else {
+        gridApi.hideOverlay();
+      }
+    }
+  }, [loading, gridApi]);
+  const PurchaseTable = () => {
+    const colDefs = [
+      {
+        headerName: "Invoice No.",
+        field: "puchase_invoice_no",
+        flex: 1,
+        cellStyle: { color: "var(--main-bg-color)", cursor: "pointer" },
+        cellRenderer: (params) => {
+          return <span>{params.data.puchase_invoice_no.split("purchase")[1]}</span>
+        }
+      },
+      { headerName: "Total Amount", field: "price", flex: 1 },
+      {
+        headerName: "Purcahse Date", field: "created_at", flex: 1, cellRenderer: (params) => {
+          return <span>{params.data.created_at.split("T")[0]}</span>
+        }
+      },
+      {
+        headerName: "Available Quantity",
+        field: "quantity_available",
+        flex: 1,
+      },
+    ];
+
+    return (
+      <div
+        className="ag-theme-quartz custom-ag-theme"
+        style={{ width: "100%", paddingRight: "20px" }}
+      >
+        <AgGridReact
+          rowData={rowData}
+          columnDefs={colDefs}
+          defaultColDef={{
+            sortable: true,
+            filter: true,
+            resizable: true,
+            width: 100,
+            autoHeight: true,
+          }}
+          suppressCellSelection={true}
+          gridOptions={{ headerHeight: 30, rowHeight: 28 }}
+          rowSelection="multiple"
+          pagination={true}
+          onGridReady={onGridReady}
+          paginationPageSize={10}
+          enableCellTextSelection={true}
+          domLayout={"autoHeight"}
+          onCellClicked={(event) => {
+            if (event.colDef.headerName === "Invoice No.") {
+              getPurchaseWithInvoice(event?.data?.puchase_invoice_no)
+            }
+          }}
+        />
+      </div>
+    );
+  };
+  const PurchaseTableDetails = () => {
+    const colDefs = [
+      {
+        headerName: "Supplier Name",
+        field: "supplier_name",
+        flex: 1,
+
+      },
+      {
+        headerName: "Product Name",
+        field: "name",
+        flex: 1,
+        cellStyle: { color: "var(--main-bg-color)", cursor: "pointer" },
+      },
+      { headerName: "Brand", field: "brand", flex: 1 },
+      { headerName: "Category", field: "category", flex: 1 },
+      { headerName: "MRP", field: "price", flex: 1 },
+      {
+        headerName: "Available Quantity",
+        field: "quantity_available",
+        flex: 1,
+      },
+    ];
+
+    return (
+      <div
+        className="ag-theme-quartz custom-ag-theme"
+        style={{ width: "100%", paddingRight: "20px" }}
+      >
+        <AgGridReact
+          rowData={rowData2}
+          columnDefs={colDefs}
+          defaultColDef={{
+            sortable: true,
+            filter: true,
+            resizable: true,
+            width: 100,
+            autoHeight: true,
+          }}
+          suppressCellSelection={true}
+          gridOptions={{ headerHeight: 30, rowHeight: 28 }}
+          rowSelection="multiple"
+          pagination={true}
+          onGridReady={onGridReady}
+          paginationPageSize={10}
+          enableCellTextSelection={true}
+          domLayout={"autoHeight"}
+          onCellClicked={(event) => {
+            if (event.colDef.headerName === "Product Name") {
+              setProduct(() => {
+                return [
+                  {
+                    name: event?.data?.name,
+                    brand: event?.data?.brand,
+                    category: event?.data?.category,
+                    price: event?.data?.price,
+                    quantity_available: event.data?.quantity_available,
+                    id: event?.data?.id,
+                    isControldisabled: true,
+                  },
+                ];
+              });
+              setIsAddNewClicked(false);
+              setIsUpdate(true);
+              setPopUpTitle("Update Purchase");
+              toggleModal();
+            }
+          }}
+        />
+      </div>
+    );
+  };
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+    setIsSaveing(false);
+  };
+
   const addIteamInPurchasePopUp = () => {
+    if (!isModalOpen) return null;
     const addIteam = () => {
       return (
-        <div>
-          <div className=" mb-3 text-end">
+        <div className=" card ">
+          <div style={{ marginRight: "20px" }} className=" mb-3 text-end">
             <button
+              style={{ marginRight: "20px" }}
               className=" btn "
-              onClick={createPurchase}
-              disabled={!idFromValid}
+              onClick={updatePurchase}
+              disabled={!isUpdate || isSaving}
             >
-              Save
+              Update
             </button>
           </div>
           <div style={{ width: "100%", overflowX: "scroll" }}>
@@ -207,8 +431,8 @@ const Purchase = () => {
               </thead>
               <tbody>
                 {product?.map((event, index) => (
-                  <tr key={event?.id} >
-                    <td style={{ borderRight: "2px solid gray", cursor: "pointer" }}>
+                  <tr key={event?.id}>
+                    <td>
                       {index === product.length - 1 && (
                         <span
                           onClick={() => {
@@ -410,23 +634,58 @@ const Purchase = () => {
       });
     };
     return (
-      addIteam()
+      <div
+        className="modal fade show d-block"
+        id="exampleModal"
+        tabIndex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                {popupTitle}
+              </h5>
+              <button
+                type="button"
+                className="close"
+                onClick={() => {
+                  setIsAddNewClicked(false);
+                  toggleModal();
+                }}
+                aria-label="Close"
+              >
+                <span
+                  style={{ fontSize: "20px", fontWeight: "bolder" }}
+                  aria-hidden="true"
+                >
+                  &times;
+                </span>
+              </button>
+            </div>
+            <div className="modal-body">{addIteam()}</div>
+          </div>
+        </div>
+      </div>
     );
   };
 
   return (
     <div>
-      <h4 className="heading-text mb-3">Create Purchase</h4>
+      <h4 className="heading-text mb-5">Purchase List</h4>
       {loading && (
         <div className="loader-container">
           <div className="loader"></div>
         </div>
       )}
-      <div style={{ marginRight: "20px" }}>
-        {addIteamInPurchasePopUp()}
-      </div>
+      {PurchaseTable()}
+      {rowData2?.length > 0 && PurchaseTableDetails()}
+      {addIteamInPurchasePopUp()}
+      {isModalOpen && <div className="modal-backdrop fade show"></div>}
     </div>
   );
 };
 
-export default Purchase;
+export default PurchaseList;

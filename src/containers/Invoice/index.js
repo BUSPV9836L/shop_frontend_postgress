@@ -557,7 +557,7 @@ const Invoice = () => {
 
   return (
     <div>
-      <h4 className="heading-text mb-3">Invoice</h4>
+      <h4 className="heading-text mb-3"> Create Sale</h4>
       {isLoading && (
         <div className="loader-container">
           <div className="loader"></div>

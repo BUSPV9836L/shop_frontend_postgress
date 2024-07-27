@@ -211,6 +211,11 @@ const Sales = (props) => {
   return (
     <div>
       <h4 className="heading-text mb-5">Sales</h4>
+      {loading && (
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
+      )}
       {salesTable()}
       {rowData2.length > 0 && saleDetailsTable()}
     </div>

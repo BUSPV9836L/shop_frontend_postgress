@@ -25,6 +25,7 @@ const Supplier = () => {
   });
 
   const getAllSupplier = async () => {
+    setLoading(true)
     const url = new URL(`${String.BASE_URL}/suppliers`);
     url.searchParams.append("user_id", sessionStorage.getItem("userid"));
     try {
@@ -146,19 +147,19 @@ const Supplier = () => {
     } else if (!supplier.contact_email) {
       Alert(DANGER, "Please Enter Contact Email")
       return false
-    }else if(supplier.contact_phone?.trim().length!==10){
+    } else if (supplier.contact_phone?.trim().length !== 10) {
       Alert(DANGER, "Please Enter  Contact Phone")
       return false
-    }else if(!supplier.address_line1){
+    } else if (!supplier.address_line1) {
       Alert(DANGER, "Please Enter Address")
       return false
-    }else if(!supplier.city){
+    } else if (!supplier.city) {
       Alert(DANGER, "Please Enter City")
       return false
-    }else if(!supplier.state){
+    } else if (!supplier.state) {
       Alert(DANGER, "Please Enter State")
       return false
-    }else{
+    } else {
       return true
     }
   }
@@ -166,6 +167,7 @@ const Supplier = () => {
     if (!validate()) {
       return
     }
+    setLoading(true)
     try {
       const token = sessionStorage.getItem("accessToken");
       const response = await fetch(`${String.BASE_URL}/suppliers`, {
@@ -174,7 +176,7 @@ const Supplier = () => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({...supplier,user_id:sessionStorage.getItem("userid")}),
+        body: JSON.stringify({ ...supplier, user_id: sessionStorage.getItem("userid") }),
       });
       const data = await response.json();
       if (!data?.stackTrace) {
@@ -186,6 +188,8 @@ const Supplier = () => {
       }
     } catch (error) {
       Alert(DANGER, error.message);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -330,6 +334,11 @@ const Supplier = () => {
 
   return (
     <div>
+      {loading && (
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
+      )}
       <h4 className="heading-text mb-5">Supplier List</h4>
       <div style={{ marginRight: "20px", marginTop: "-30px" }} className="mb-3 text-end">
         <button

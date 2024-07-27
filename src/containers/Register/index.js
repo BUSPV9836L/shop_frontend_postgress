@@ -206,6 +206,11 @@ const Register = (props) => {
 
   return (
     <div className="row w-100">
+      {isLoading && (
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
+      )}
       <div className="col-8 login-left">{leftComponent()}</div>
       <div className="col-4">{rightComponent()}</div>
     </div>

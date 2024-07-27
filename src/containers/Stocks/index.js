@@ -106,6 +106,11 @@ const Stocks = () => {
   return (
     <div>
       <h4 className="heading-text mb-5">Stocks</h4>
+      {loading && (
+        <div className="loader-container">
+          <div className="loader"></div>
+        </div>
+      )}
       {stockTable()}
     </div>
   );
