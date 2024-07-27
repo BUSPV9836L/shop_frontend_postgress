@@ -569,7 +569,7 @@ const Invoice = () => {
           className="btn mb-3"
           disabled={!idFromValid}
         >
-          Create Sale
+          Save
         </button>
         {createInvoice()}
       </div>
