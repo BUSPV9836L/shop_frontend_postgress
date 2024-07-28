@@ -48,7 +48,7 @@ const Invoice = () => {
         Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      Alert(DANGER, error.message);
+      Alert(DANGER,"Some Error Occured");
     } finally {
       setIsLoading(false);
     }
@@ -71,7 +71,7 @@ const Invoice = () => {
         Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      Alert(DANGER, error.message);
+      Alert(DANGER,"Some Error Occured");
     } finally {
       setIsLoading(false);
     }
@@ -103,7 +103,7 @@ const Invoice = () => {
         Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      Alert(DANGER, error.message);
+      Alert(DANGER,"Some Error Occured");
     } finally {
       setIsLoading(false);
       setIsCreatingSale(false);

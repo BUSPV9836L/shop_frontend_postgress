@@ -103,7 +103,7 @@ const Dashboard = () => {
           redirect: "/Stock",
         },
       ]);
-      Alert(DANGER,error.message);
+      Alert(DANGER,"Some Error Occured");
     } finally {
       setIsLoading(false);
     }

@@ -56,7 +56,7 @@ const Purchase = () => {
         Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      Alert(DANGER, error.message);
+      Alert(DANGER,"Some Error Occured");
     } finally {
       setProduct([
         {
@@ -92,7 +92,7 @@ const Purchase = () => {
         Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      Alert(DANGER, error.message);
+      Alert(DANGER,"Some Error Occured");
     } finally {
       setLoading(false);
     }

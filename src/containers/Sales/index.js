@@ -46,7 +46,7 @@ const Sales = (props) => {
         setRowData(data);
       }
     } catch (error) {
-      Alert(DANGER,error.message)
+      Alert(DANGER,"Some Error Occured");
     } finally {
       setLoading(false);
     }
@@ -69,7 +69,7 @@ const Sales = (props) => {
         setRowData2(data);
       }
     } catch (error) {
-      Alert(DANGER,error.message)
+      Alert(DANGER,"Some Error Occured");
     } finally {
       setLoading(false);
     }

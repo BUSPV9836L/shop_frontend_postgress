@@ -31,7 +31,7 @@ const InvoiceReceipt = () => {
         setInvoiceData(data);
       }
     } catch (error) {
-      Alert(DANGER,error.message)
+      Alert(DANGER,"Some Error Occured");
     }
   };
 

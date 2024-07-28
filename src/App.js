@@ -17,6 +17,7 @@ import InvoiceReceipt from "./containers/Invoice/InvoiceReceipt";
 import Register from "./containers/Register";
 import Supplier from "./containers/Supplier";
 import PurchaseList from "./containers/PurchaseList";
+import LayoutLogin from "./component/LayoutLogin";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(
@@ -30,69 +31,76 @@ function App() {
   const router = createBrowserRouter(
     !isLoggedIn
       ? [
-          {
-            path: "/",
-            element: <Login setLogging={setLogging} />,
-          },
-          {
-            path: "/register",
-            element: <Register setLogging={setLogging} />,
-          },
-          {
-            path: "*",
-            element: <Navigate to="/" replace />,
-          },
-        ]
+        {
+          path: "/",
+          element: <LayoutLogin />,
+          children: [
+            {
+              path: "/",
+              element: <Login setLogging={setLogging} />,
+            },
+            {
+              path: "/register",
+              element: <Register setLogging={setLogging} />,
+            },
+            {
+              path: "*",
+              element: <Navigate to="/" replace />,
+            }
+          ]
+        },
+
+      ]
       : [
-          {
-            path: "/",
-            element: <Layout setLogging={setLogging} />,
-            children: [
-              {
-                path: "/" + String.Dashboard,
-                element: <Dashboard />,
-              },
-              {
-                path: "/" + String.Purchase,
-                element: <Purchase />,
-              },
-              {
-                path: "/" + String.Purchase_List,
-                element: <PurchaseList />,
-              },
-              
-              {
-                path: "/" + String.Sales,
-                element: <Sales />,
-              },
-              {
-                path: "/" + String.Create_Sale,
-                element: <Invoice />,
-              },
-              {
-                path: "/" + String.Stocks,
-                element: <Stocks />,
-              },
-              {
-                path: "/" + String.InvoiceReceipt,
-                element: <InvoiceReceipt />,
-              },
-              {
-                path: "/" + String.Supplier,
-                element: <Supplier />,
-              },  
-              {
-                path: "/",
-                element: <Navigate to={"/" + String.Dashboard} replace />,
-              },
-              
-              {
-                path: "*",
-                element: <Navigate to={"/" + String.Dashboard} replace />,
-              },
-            ],
-          },
-        ]
+        {
+          path: "/",
+          element: <Layout setLogging={setLogging} />,
+          children: [
+            {
+              path: "/" + String.Dashboard,
+              element: <Dashboard />,
+            },
+            {
+              path: "/" + String.Purchase,
+              element: <Purchase />,
+            },
+            {
+              path: "/" + String.Purchase_List,
+              element: <PurchaseList />,
+            },
+
+            {
+              path: "/" + String.Sales,
+              element: <Sales />,
+            },
+            {
+              path: "/" + String.Create_Sale,
+              element: <Invoice />,
+            },
+            {
+              path: "/" + String.Stocks,
+              element: <Stocks />,
+            },
+            {
+              path: "/" + String.InvoiceReceipt,
+              element: <InvoiceReceipt />,
+            },
+            {
+              path: "/" + String.Supplier,
+              element: <Supplier />,
+            },
+            {
+              path: "/",
+              element: <Navigate to={"/" + String.Dashboard} replace />,
+            },
+
+            {
+              path: "*",
+              element: <Navigate to={"/" + String.Dashboard} replace />,
+            },
+          ],
+        },
+      ]
   );
 
   return (

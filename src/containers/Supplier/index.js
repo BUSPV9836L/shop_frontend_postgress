@@ -44,7 +44,7 @@ const Supplier = () => {
         Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      Alert(DANGER, error.message);
+      Alert(DANGER,"Some Error Occured");
     } finally {
       setLoading(false);
     }
@@ -187,7 +187,7 @@ const Supplier = () => {
         Alert(DANGER, data.message);
       }
     } catch (error) {
-      Alert(DANGER, error.message);
+      Alert(DANGER,"Some Error Occured");
     } finally {
       setLoading(false)
     }

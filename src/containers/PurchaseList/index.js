@@ -67,7 +67,7 @@ const PurchaseList = () => {
         Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      Alert(DANGER, error.message);
+      Alert(DANGER,"Some Error Occured");
     } finally {
       setIsModalOpen(false);
       setIsSaveing(false);
@@ -96,7 +96,7 @@ const PurchaseList = () => {
         Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      Alert(DANGER, error.message);
+      Alert(DANGER,"Some Error Occured");
     } finally {
       setIsModalOpen(false);
       setIsSaveing(false);
@@ -142,7 +142,7 @@ const PurchaseList = () => {
         Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      Alert(DANGER, error.message);
+      Alert(DANGER,"Some Error Occured");
     } finally {
       setIsModalOpen(false);
     }
@@ -166,7 +166,7 @@ const PurchaseList = () => {
         Alert(PRIMARY, data.message);
       }
     } catch (error) {
-      Alert(DANGER, error.message);
+      Alert(DANGER,"Some Error Occured");
     } finally {
       setLoading(false);
     }

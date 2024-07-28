@@ -85,7 +85,7 @@ const ApexChart = () => {
         handeSetChart(series, option);
       }
     } catch (error) {
-      Alert(DANGER,error.message);
+      Alert(DANGER,"Some Error Occured");
     }
   };
   const generteDataAsRequired = (inputData) => {
