@@ -53,7 +53,7 @@ const Purchase = () => {
         Alert(SUCCESS, "Record Saved Succesfully!");
         navigate("/"+String.Purchase_List)
       } else {
-        Alert(PRIMARY, data.message);
+         throw new Error("Some Error Occured");
       }
     } catch (error) {
       Alert(DANGER,"Some Error Occured");
@@ -89,7 +89,7 @@ const Purchase = () => {
       if (!data?.stackTrace) {
         setSupplier(data);
       } else {
-        Alert(PRIMARY, data.message);
+         throw new Error("Some Error Occured");
       }
     } catch (error) {
       Alert(DANGER,"Some Error Occured");

@@ -131,7 +131,7 @@ const Dashboard = () => {
       if (!data?.stackTrace) {
         setProfit(data?.profit);
       }else{
-        Alert(PRIMARY,data.message);
+         throw new Error("Some Error Occured");
       }
     } catch (error) {
       Alert(DANGER,error.message);

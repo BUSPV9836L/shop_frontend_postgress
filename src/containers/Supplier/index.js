@@ -41,7 +41,7 @@ const Supplier = () => {
       if (!data?.stackTrace) {
         setRowData(data);
       } else {
-        Alert(PRIMARY, data.message);
+         throw new Error("Some Error Occured");
       }
     } catch (error) {
       Alert(DANGER,"Some Error Occured");

@@ -32,7 +32,7 @@ const Login = (props) => {
         }),
       });
       const data = await response.json();
-      if (data.accessToken) {
+      if (!data?.stackTrace) {
         setIsLoogedIn(true);
         props.setLogging(true);
         sessionStorage.setItem("accessToken", data.accessToken);
@@ -43,7 +43,7 @@ const Login = (props) => {
           navigate("/" + String.Dashboard);
         }, 500);
       }else{
-        Alert(PRIMARY,data.message);
+        throw new Error("Some Error Occured");
       }
     } catch (error) {
       Alert(DANGER,"Some Error Occured");

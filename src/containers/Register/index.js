@@ -81,7 +81,7 @@ const Register = (props) => {
           Alert(SUCCESS,"Registration successful!");
           navigate("/");
         }else{
-          Alert(PRIMARY,data.message);
+           throw new Error("Some Error Occured");
         }
       } catch (error) {
         Alert(DANGER,"Some Error Occured");

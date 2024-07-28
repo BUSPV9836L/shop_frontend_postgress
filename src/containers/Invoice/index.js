@@ -45,7 +45,7 @@ const Invoice = () => {
       if (!data?.stackTrace) {
         setStockOption(data);
       } else {
-        Alert(PRIMARY, data.message);
+         throw new Error("Some Error Occured");
       }
     } catch (error) {
       Alert(DANGER,"Some Error Occured");
@@ -68,7 +68,7 @@ const Invoice = () => {
       if (!data?.stackTrace) {
         setInvoiceNo(data.invoice_no);
       } else {
-        Alert(PRIMARY, data.message);
+         throw new Error("Some Error Occured");
       }
     } catch (error) {
       Alert(DANGER,"Some Error Occured");
@@ -100,7 +100,7 @@ const Invoice = () => {
       if (!data?.stackTrace) {
         Alert(SUCCESS, "Record saved succesfully!");
       } else {
-        Alert(PRIMARY, data.message);
+         throw new Error("Some Error Occured");
       }
     } catch (error) {
       Alert(DANGER,"Some Error Occured");

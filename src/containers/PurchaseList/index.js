@@ -64,7 +64,7 @@ const PurchaseList = () => {
       if (!data?.stackTrace) {
         setRowData(data);
       } else {
-        Alert(PRIMARY, data.message);
+         throw new Error("Some Error Occured");
       }
     } catch (error) {
       Alert(DANGER,"Some Error Occured");
@@ -93,7 +93,7 @@ const PurchaseList = () => {
       if (!data?.stackTrace) {
         setRowData2(data);
       } else {
-        Alert(PRIMARY, data.message);
+         throw new Error("Some Error Occured");
       }
     } catch (error) {
       Alert(DANGER,"Some Error Occured");
@@ -139,7 +139,7 @@ const PurchaseList = () => {
         setRowData2([])
         Alert(SUCCESS, "Record Updated Succesfully!");
       } else {
-        Alert(PRIMARY, data.message);
+         throw new Error("Some Error Occured");
       }
     } catch (error) {
       Alert(DANGER,"Some Error Occured");
@@ -163,7 +163,7 @@ const PurchaseList = () => {
       if (!data?.stackTrace) {
         setSupplier(data);
       } else {
-        Alert(PRIMARY, data.message);
+         throw new Error("Some Error Occured");
       }
     } catch (error) {
       Alert(DANGER,"Some Error Occured");
